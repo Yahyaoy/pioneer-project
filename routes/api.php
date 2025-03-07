@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\InitiativeController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\AuthController;
@@ -16,77 +19,111 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+// ✅ Get Authenticated User (Requires Sanctum Token)
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-    Route::post('/register', [AuthController::class, 'register']);
 
-    Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+// Authentication Routes (Public)
+Route::post('/register', [AuthController::class, 'register']); // User Registration
+Route::post('/login', [AuthController::class, 'login']);       // User Login
+    Route::post('/register/initiative-owner', [AuthController::class, 'registerInitiativeOwner']);
+
+// Email Verification Routes
+Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
+    $request->fulfill(); // Mark email as verified
+    return response()->json(['message' => 'Email successfully verified.']);
+})->middleware(['signed'])->name('verification.verify');
+
+//  Protected Routes (Require Authentication)
+Route::middleware('auth:sanctum')->group(function () {
 
 
-    // Send verification email again
-        Route::post('/email/verify/resend', function (Request $request) {
-            $request->user()->sendEmailVerificationNotification();
-            return response()->json(['message' => 'Verification email resent.']);
-        })->middleware('auth:sanctum');
-
-
-    // Handle email verification callback
-        Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
-            $request->fulfill();
-            return response()->json(['message' => 'Email successfully verified.']);
-        })->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
+    // Resend Email Verification
+    Route::post('/email/verify/resend', function (Request $request) {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Email is already verified.'], 400);
+        }
+        $request->user()->sendEmailVerificationNotification();
+        return response()->json(['message' => 'Verification email resent.']);
     });
 
-    // Step 1: Get Google OAuth URL
-            Route::get('/auth/google/redirect', function () {
-                return response()->json([
-                    'url' => Socialite::driver('google')->stateless()->redirect()->getTargetUrl()
+    // Example of a Protected Route (Requires Email Verification)
+    Route::get('/profile', function (Request $request) {
+        return response()->json($request->user());
+    })->middleware('verified'); // Ensures user is verified
+
+    // Logout User
+    Route::post('/logout', function (Request $request) {
+        $request->user()->tokens()->delete(); // Delete all user tokens
+        return response()->json(['message' => 'Logged out successfully']);
+    });
+
+    // initiatives المبادرات
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/initiatives', [InitiativeController::class, 'store']); // إنشاء مبادرة جديدة
+        Route::get('/initiatives', [InitiativeController::class, 'index']); // عرض جميع المبادرات
+        Route::get('/initiatives/{id}', [InitiativeController::class, 'show']); // عرض تفاصيل المبادرة
+        Route::post('/initiatives/{id}/join', [InitiativeController::class, 'requestToJoin']);
+        Route::post('/initiatives/{id}/participants/{participantId}', [InitiativeController::class, 'manageParticipant']);
+    });
+
+});
+
+//  Google OAuth Routes(For Social Login)
+Route::prefix('auth/google')->group(function () {
+
+    //  Redirect to Google for Authentication
+    Route::get('/redirect', function () {
+        return response()->json([
+            'url' => Socialite::driver('google')->stateless()->redirect()->getTargetUrl()
+        ]);
+    });
+
+    //  Handle Google OAuth Callback
+    Route::get('/callback', function () {
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+
+            // Check if the user exists by provider_id
+            $user = User::where('provider_id', $googleUser->getId())->first();
+
+            if (!$user) {
+                // Create a new user if they don't exist
+                $user = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'provider' => 'google',
+                    'provider_id' => $googleUser->getId(),
+                    'password' => bcrypt('randompassword'), // Placeholder password
                 ]);
-            });
+            }
 
-    // Step 2: Handle Google OAuth Callback
-            Route::get('/auth/google/callback', function () {
-                try {
-                    $googleUser = Socialite::driver('google')->stateless()->user();
+            // Generate an API token for the user
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-                    // Check if the user exists
-                    $user = \App\Models\User::where('provider_id', $googleUser->getId())->first();
+            return response()->json([
+                'user' => $user,
+                'token' => $token
+            ]);
 
-                    if (!$user) {
-                        // Create a new user if they don't exist
-                        $user = \App\Models\User::create([
-                            'name' => $googleUser->getName(),
-                            'email' => $googleUser->getEmail(),
-                            'provider' => 'google',
-                            'provider_id' => $googleUser->getId(),
-                            'password' => bcrypt('randompassword'), // Placeholder password
-                        ]);
-                    }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Invalid credentials', 'message' => $e->getMessage()], 401);
+        }
+    });
 
-                    // Generate an API token
-                    $token = $user->createToken('auth_token')->plainTextToken;
+});
 
-                    return response()->json([
-                        'user' => $user,
-                        'token' => $token
-                    ]);
+// الاشعارات
+//  عرض جميع الإشعارات
+Route::middleware('auth:sanctum')->get('/notifications', [NotificationController::class, 'index']);
 
-                } catch (\Exception $e) {
-                    return response()->json(['error' => 'Invalid credentials'], 401);
-                }
-            });
+//  وضع الإشعار كمقروء
+Route::middleware('auth:sanctum')->put('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
 
-    //  Get Authenticated User
-            Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-                return response()->json($request->user());
-            });
+//  حذف إشعار معين
+Route::middleware('auth:sanctum')->delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 
-    //  Logout User
-            Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
-                $request->user()->tokens()->delete();
-                return response()->json(['message' => 'Logged out successfully']);
-            });
-
+//  إنشاء إشعار جديد (للاستخدام الداخلي)
+Route::middleware('auth:sanctum')->post('/notifications', [NotificationController::class, 'store']);
 

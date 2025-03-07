@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Mail\VerificationCodeMail;
+use App\Models\InitiativeParticipant;
+use App\Models\Notification;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -36,7 +38,12 @@ class AuthController extends Controller
         ]);
 
         $user->sendEmailVerificationNotification();
-
+// إرسال إشعار إلى المستخدم الجديد
+        Notification::create([
+            'user_id' => $user->id,
+            'title' => 'مرحبًا بك في تطبيقنا!',
+            'message' => 'شكرًا لك على التسجيل. نحن سعداء بانضمامك إلينا!',
+        ]);
         return response()->json([
             'message' => 'تم إنشاء الحساب.',
             'user' => [
@@ -81,6 +88,70 @@ class AuthController extends Controller
             ],
             'token' => $token
         ]);
+    }
+
+
+    //  تسجيل مؤسسة جديدة + مدير الحساب
+    public function registerInitiativeOwner(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            // بيانات المؤسسة
+            'org_name' => 'required|string|max:255',
+            'org_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'country' => 'required|string',
+            'city' => 'required|string',
+            'type' => 'required|string',
+            'sector' => 'required|string',
+            'size' => 'required|string',
+
+            // بيانات مدير الحساب
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'job_title' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'preferred_language' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // رفع صورة الشعار إن وجدت
+        $logoPath = null;
+        if ($request->hasFile('org_logo')) {
+            $logoPath = $request->file('org_logo')->store('logos', 'public');
+        }
+
+        // إنشاء المؤسسة
+        $organization = Organization::create([
+            'name' => $request->org_name,
+            'logo' => $logoPath,
+            'country' => $request->country,
+            'city' => $request->city,
+            'type' => $request->type,
+            'sector' => $request->sector,
+            'size' => $request->size,
+        ]);
+
+        // إنشاء حساب المدير
+        $user = User::create([
+            'organization_id' => $organization->id,
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'email' => $request->email,
+            'job_title' => $request->job_title,
+            'password' => Hash::make($request->password),
+            'preferred_language' => $request->preferred_language,
+        ]);
+
+        // إرسال بريد التحقق
+        $user->sendEmailVerificationNotification();
+
+        return response()->json([
+            'message' => 'تم إنشاء المؤسسة وحساب المدير بنجاح. يرجى التحقق من البريد الإلكتروني.',
+            'organization' => $organization,
+            'user' => $user
+        ], 201);
     }
 
 
