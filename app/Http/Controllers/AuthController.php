@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -34,7 +35,7 @@ class AuthController extends Controller
             'password'=> Hash::make($request->password),
         ]);
 
-//        $user->sendEmailVerificationNotification();
+        $user->sendEmailVerificationNotification();
 
         return response()->json([
             'message' => 'تم إنشاء الحساب.',
@@ -46,5 +47,42 @@ class AuthController extends Controller
                 ]
         ], 201);
     }
+
+    public function login(Request $request)
+    {
+        //  Validate the input
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Check if credentials are valid
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json(['message' => 'Invalid email or password'], 401);
+        }
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // ✅ Generate API token
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        // Return response with user data and token
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+            'token' => $token
+        ]);
+    }
+
+
 
 }
