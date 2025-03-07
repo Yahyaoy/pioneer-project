@@ -16,8 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone')->nullable()->unique();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('profile_image')->nullable();
+            $table->integer('volunteer_hours')->default(0);
+            $table->integer('participated_initiatives')->default(0);
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
+            $table->rememberToken(); // لحفظ التوكن لجلسات تسجيل الدخول
             $table->timestamps();
         });
     }
