@@ -44,4 +44,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Organization::class);
     }
+
+    public function isNormalUser()
+    {
+        return $this->role === 'normal_user';
+    }
+
+    public function isInitiativeOwner()
+    {
+        return $this->role === 'initiative_owner';
+    }
 }

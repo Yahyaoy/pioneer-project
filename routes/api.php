@@ -60,12 +60,38 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // initiatives المبادرات
+//    Route::middleware('auth:sanctum')->group(function () {
+//        Route::post('/initiatives', [InitiativeController::class, 'store']); // إنشاء مبادرة جديدة
+//        Route::get('/initiatives', [InitiativeController::class, 'index']); // عرض جميع المبادرات
+//        Route::get('/initiatives/{id}', [InitiativeController::class, 'show']); // عرض تفاصيل المبادرة
+//        Route::put('/initiatives/{id}', [InitiativeController::class, 'update']);
+//        Route::delete('/initiatives/{id}', [InitiativeController::class, 'destroy']);
+//        Route::post('/initiatives/{id}/join', [InitiativeController::class, 'requestToJoin']);
+//        Route::post('/initiatives/{id}/participants/{participantId}', [InitiativeController::class, 'manageParticipant']);
+//        Route::get('/initiatives/{id}/participants', [InitiativeController::class, 'participants']);
+//        Route::delete('/initiatives/{id}/leave', [InitiativeController::class, 'leaveInitiative']);
+//
+//        Route::post('/initiatives/{id}/join', [InitiativeController::class, 'requestToJoin']);
+//        Route::post('/initiatives/{id}/participants/{participantId}', [InitiativeController::class, 'manageParticipant']);
+//
+//    });
+
+
+    //  Public Routes (Accessible by Normal Users)
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/initiatives', [InitiativeController::class, 'store']); // إنشاء مبادرة جديدة
-        Route::get('/initiatives', [InitiativeController::class, 'index']); // عرض جميع المبادرات
-        Route::get('/initiatives/{id}', [InitiativeController::class, 'show']); // عرض تفاصيل المبادرة
-        Route::post('/initiatives/{id}/join', [InitiativeController::class, 'requestToJoin']);
-        Route::post('/initiatives/{id}/participants/{participantId}', [InitiativeController::class, 'manageParticipant']);
+        Route::get('/initiatives', [InitiativeController::class, 'index']); // View all initiatives
+        Route::get('/initiatives/{id}', [InitiativeController::class, 'show']); // View single initiative
+        Route::post('/initiatives/{id}/join', [InitiativeController::class, 'requestToJoin']); // Request to join an initiative
+        Route::get('/initiatives/{id}/participants', [InitiativeController::class, 'participants']); // View participants
+        Route::delete('/initiatives/{id}/leave', [InitiativeController::class, 'leaveInitiative']); // Leave initiative
+    });
+
+// Protected Routes for Initiative Owners (Only Owners Can Access)
+    Route::middleware(['auth:sanctum', 'role:initiative_owner'])->group(function () {
+        Route::post('/initiatives', [InitiativeController::class, 'store']); // Create initiative
+        Route::put('/initiatives/{id}', [InitiativeController::class, 'update']); // Update initiative
+        Route::delete('/initiatives/{id}', [InitiativeController::class, 'destroy']); // Delete initiative
+        Route::post('/initiatives/{id}/participants/{participantId}', [InitiativeController::class, 'manageParticipant']); // Accept/Reject participants
     });
 
 });

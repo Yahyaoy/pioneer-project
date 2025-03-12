@@ -35,6 +35,7 @@ class AuthController extends Controller
             'phone'=> $request->phone,
             'email' =>$request->email,
             'password'=> Hash::make($request->password),
+            'role' => 'normal_user',
         ]);
 
         $user->sendEmailVerificationNotification();
@@ -75,7 +76,7 @@ class AuthController extends Controller
         // Get the authenticated user
         $user = Auth::user();
 
-        // ✅ Generate API token
+        //  Generate API token
         $token = $user->createToken('API Token')->plainTextToken;
 
         // Return response with user data and token
@@ -95,7 +96,7 @@ class AuthController extends Controller
     public function registerInitiativeOwner(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // بيانات المؤسسة
+            //  بيانات المؤسسة
             'org_name' => 'required|string|max:255',
             'org_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'country' => 'required|string',
@@ -104,7 +105,7 @@ class AuthController extends Controller
             'sector' => 'required|string',
             'size' => 'required|string',
 
-            // بيانات مدير الحساب
+            //  بيانات مدير الحساب
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'job_title' => 'required|string|max:255',
@@ -117,13 +118,23 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // رفع صورة الشعار إن وجدت
+        //  رفع صورة الشعار إن وجدت
         $logoPath = null;
         if ($request->hasFile('org_logo')) {
             $logoPath = $request->file('org_logo')->store('logos', 'public');
         }
 
-        // إنشاء المؤسسة
+        //  إنشاء حساب مدير المؤسسة أولاً
+        $user = User::create([
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'email' => $request->email,
+            'job_title' => $request->job_title,
+            'password' => Hash::make($request->password),
+            'preferred_language' => $request->preferred_language,
+            'role' => 'initiative_owner', //  تحديد الدور
+        ]);
+
+        //  إنشاء المؤسسة وربطها بالمستخدم كـ `admin_id`
         $organization = Organization::create([
             'name' => $request->org_name,
             'logo' => $logoPath,
@@ -132,25 +143,21 @@ class AuthController extends Controller
             'type' => $request->type,
             'sector' => $request->sector,
             'size' => $request->size,
+            'admin_id' => $user->id, // 🛑 الآن لدينا `user->id` ونربطه هنا
         ]);
 
-        // إنشاء حساب المدير
-        $user = User::create([
-            'organization_id' => $organization->id,
-            'name' => $request->first_name . ' ' . $request->last_name,
-            'email' => $request->email,
-            'job_title' => $request->job_title,
-            'password' => Hash::make($request->password),
-            'preferred_language' => $request->preferred_language,
-        ]);
+        //  تحديث المستخدم بربطه بالمؤسسة
+        $user->organization_id = $organization->id;
+        $user->save();
 
-        // إرسال بريد التحقق
-        $user->sendEmailVerificationNotification();
+        //  تسجيل الدخول تلقائيًا بعد التسجيل
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'تم إنشاء المؤسسة وحساب المدير بنجاح. يرجى التحقق من البريد الإلكتروني.',
             'organization' => $organization,
-            'user' => $user
+            'user' => $user,
+            'token' => $token
         ], 201);
     }
 
