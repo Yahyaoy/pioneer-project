@@ -22,6 +22,7 @@ class InitiativeController extends Controller
             'max_participants' => 'required|integer|min:1',
             'details' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+            'hours' => 'required|integer|min:1'
         ]);
 
         if ($validator->fails()) {
@@ -36,6 +37,7 @@ class InitiativeController extends Controller
             'end_date' => $request->end_date,
             'max_participants' => $request->max_participants,
             'details' => $request->details,
+            'hours' => $request->hours,
             'image' => $request->file('image') ? $request->file('image')->store('initiatives') : null,
         ]);
 
@@ -72,7 +74,8 @@ class InitiativeController extends Controller
             'end_date' => 'sometimes|date',
             'max_participants' => 'sometimes|integer|min:1',
             'details' => 'nullable|string',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'nullable|image|max:2048',
+            'hours' => 'sometimes|integer|min:1'
         ]);
 
         if ($validator->fails()) {

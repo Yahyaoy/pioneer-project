@@ -141,6 +141,8 @@ class AuthController extends Controller
             'country' => $request->country,
             'city' => $request->city,
             'type' => $request->type,
+            'founded_at' => $request->founded_at,
+            'website    hp' => $request->type,
             'sector' => $request->sector,
             'size' => $request->size,
             'admin_id' => $user->id, // 🛑 الآن لدينا `user->id` ونربطه هنا
