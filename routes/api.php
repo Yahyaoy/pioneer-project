@@ -65,6 +65,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/initiatives/{id}/join', [InitiativeController::class, 'requestToJoin']); // Request to join an initiative
         Route::get('/initiatives/{id}/participants', [InitiativeController::class, 'participants']); // View participants
         Route::delete('/initiatives/{id}/leave', [InitiativeController::class, 'leaveInitiative']); // Leave initiative
+        Route::get('/my-requests', [InitiativeController::class, 'myRequests']);
+
+
 
 // Protected Routes for Initiative Owners (Only Owners Can Access)
     Route::middleware(['role:initiative_owner'])->group(function () {
@@ -101,8 +104,8 @@ Route::middleware('auth:sanctum')->group(function () {
 // Contact Us
 Route::post('/contact', [ContactController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/contact-messages', [ContactController::class, 'index'])->middleware('admin'); // Admin only
-    Route::get('/contact-messages/{id}', [ContactController::class,'show'])->middleware('admin'); // Admin only
+    Route::get('/contact-messages', [ContactController::class, 'index'])->middleware('role:initiative_owner'); // Admin only
+    Route::get('/contact-messages/{id}', [ContactController::class,'show'])->middleware('role:initiative_owner'); // Admin only
 });
 
 

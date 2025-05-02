@@ -170,12 +170,13 @@ class InitiativeController extends Controller
 
     public function participants($id)
     {
-        $participants = InitiativeParticipant::where('initiative_id', $id)
-            ->where('status', 'accepted')
-            ->with('user')
+        $participants = InitiativeParticipant::with('user')
+            ->where('initiative_id', $id)
             ->get();
 
-        return response()->json($participants);
+        return response()->json([
+            'participants' => $participants
+        ]);
     }
 
     // إلغاء الاشتراك في المبادرة
@@ -193,5 +194,22 @@ class InitiativeController extends Controller
 
         return response()->json(['message' => 'تم إلغاء اشتراكك في المبادرة']);
     }
+
+    public function myRequests()
+{
+    $user = Auth::user(); // جلب المستخدم المسجل حاليا
+
+    $requests = InitiativeParticipant::with('initiative') // جلب بيانات المبادرات المرتبطة
+    ->where('user_id', $user->id)
+        ->get();
+
+
+    return response()->json([
+        'requests' => $requests
+    ]);
+}
+
+
+
 
 }

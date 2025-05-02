@@ -40,7 +40,7 @@ class NewsController extends Controller
             'title' => $request->title,
             'details' =>$request->details,
              'image' =>$imagePath,
-            'organization_id'=> Auth::user()->organization_id, // المؤسسة الخاصة بالمستخدم
+              'organization_id'=> Auth::user()->organization_id, // المؤسسة الخاصة بالمستخدم
              'news_date' => now(),
         ]);
 
