@@ -5,31 +5,12 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Users For Initiative</h1>
-
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Users For Initiative</h6>
-            </div>
-            <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <div class="table-responsive">
-
-
-                    here data about this initiative
-
-                </div>
-            </div>
-        </div>
+        <h1 class="h3 mb-2 text-gray-800">Notifications</h1>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Users For Initiative</h6>
+                <h6 class="m-0 font-weight-bold text-primary">All Notifications Sended</h6>
             </div>
             <div class="card-body">
                 @if (session('success'))
@@ -52,40 +33,47 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Name: activate to sort column descending" style="width: 59px;">
-                                                Name</th>
+                                                User ID</th>
 
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Name: activate to sort column descending" style="width: 59px;">
-                                                Status</th>
+                                                Title</th>
 
                                             <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Start date: activate to sort column ascending"
-                                            style="width: 122px;">Created At</th>
+                                                colspan="1" aria-label="Start date: activate to sort column ascending"
+                                                style="width: 122px;">Message</th>
 
-                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Start date: activate to sort column ascending"
-                                            style="width: 122px;">Updated At</th>
+                                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-label="Start date: activate to sort column ascending"
+                                                style="width: 122px;">is Readed</th>
+                                                {{-- <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-label="Start date: activate to sort column ascending"
+                                                style="width: 122px;">Download Link</th> --}}
+
+
                                             <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
                                                 colspan="1" aria-label="Salary: activate to sort column ascending"
                                                 style="width: 109px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($initiative_patr as $initiative)
+                                        @foreach ($notifications as $notification)
                                             <tr class="odd">
-                                                <td class="sorting_1">{{ $initiative->id }}</td>
+                                                <td class="sorting_1">{{ $notification->id }}</td>
 
-                                                <td>name here</td>
-                                                <td>{{ $initiative->status }}</td>
+                                                <td>{{ $notification->user_id }}</td>
+                                                <td>
+                                                    {{ $notification->title }}
+                                                </td>
 
-                                                <td>{{ $initiative->created_at }}</td>
-                                                <td>{{ $initiative->updated_at }}</td>
+                                                <td>{{ $notification->message }}</td>
+                                                <td>{{ $notification->is_read }}</td>
 
 
 
                                                 <td>
-                                                    <form id="delete-form" action="{{ route('users.destroy', $initiative->id) }}"
+                                                    <form id="delete-form" action="{{ route('notifications.destroy', $notification->id) }}"
                                                         method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
@@ -95,12 +83,12 @@
 
 
 
-                                                    <a href="{{ route('users.show',$initiative->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                                    <a href="{{ route('notifications.show',$notification->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
 
-                                                    <a href="{{ route('users.edit',$initiative->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                                    <a href="{{ route('notifications.edit',$notification->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

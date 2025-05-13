@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactsController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
@@ -7,6 +8,9 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ChartController;
 use App\Http\Controllers\Admin\InitiativeController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\NotificationssController;
+use App\Http\Controllers\Admin\OwnersController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +22,7 @@ use App\Http\Controllers\Admin\NewsController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/',[AdminController::class,'index'])->name('admin.index')->middleware('auth');
+Route::get('/dashboard',[AdminController::class,'index'])->name('admin.index')->middleware('auth');
 
 // Owner Auth
 
@@ -49,6 +53,12 @@ Route::post('logout',[AuthController::class,'logout'])->name('logout');
 Route::resource('news',NewsController::class);
 Route::resource('initiative',InitiativeController::class);
 Route::resource('users',UserController::class);
+Route::resource('owners',OwnersController::class);
+Route::resource('contacts',ContactsController::class);
+Route::resource('notifications',NotificationssController::class);
+
+
+
 
 
 
@@ -61,6 +71,10 @@ Route::get('/getDonutChartData', [ChartController::class, 'getDonutChartData'])-
 
 
 // Website Route
-Route::get('/website', function () {
+Route::get('/', function () {
     return view('website.index');
 })->name('website.index');
+
+Route::get('/initiative/{id}',function(){
+    return view('website.details');
+})->name('initiative.details');
