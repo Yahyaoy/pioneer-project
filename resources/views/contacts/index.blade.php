@@ -5,31 +5,12 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Users For Initiative</h1>
-
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Users For Initiative</h6>
-            </div>
-            <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <div class="table-responsive">
-
-
-                    here data about this initiative
-
-                </div>
-            </div>
-        </div>
+        <h1 class="h3 mb-2 text-gray-800">Contacts</h1>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Users For Initiative</h6>
+                <h6 class="m-0 font-weight-bold text-primary">All Contacts Request</h6>
             </div>
             <div class="card-body">
                 @if (session('success'))
@@ -52,40 +33,41 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Name: activate to sort column descending" style="width: 59px;">
-                                                Name</th>
+                                                User Name</th>
 
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Name: activate to sort column descending" style="width: 59px;">
-                                                Status</th>
+                                                Phone</th>
 
                                             <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Start date: activate to sort column ascending"
-                                            style="width: 122px;">Created At</th>
+                                                colspan="1" aria-label="Start date: activate to sort column ascending"
+                                                style="width: 122px;">Subject</th>
+                                                {{-- <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-label="Start date: activate to sort column ascending"
+                                                style="width: 122px;">Download Link</th> --}}
 
-                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Start date: activate to sort column ascending"
-                                            style="width: 122px;">Updated At</th>
+
                                             <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
                                                 colspan="1" aria-label="Salary: activate to sort column ascending"
                                                 style="width: 109px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($initiative_patr as $initiative)
+                                        @foreach ($contacts as $contact)
                                             <tr class="odd">
-                                                <td class="sorting_1">{{ $initiative->id }}</td>
+                                                <td class="sorting_1">{{ $contact->id }}</td>
 
-                                                <td>name here</td>
-                                                <td>{{ $initiative->status }}</td>
+                                                <td>{{ $contact->full_name }}</td>
+                                                <td>
+                                                    {{ $contact->phone }}
+                                                </td>
 
-                                                <td>{{ $initiative->created_at }}</td>
-                                                <td>{{ $initiative->updated_at }}</td>
-
+                                                <td>{{ $news->subject }}</td>
 
 
                                                 <td>
-                                                    <form id="delete-form" action="{{ route('users.destroy', $initiative->id) }}"
+                                                    <form id="delete-form" action="{{ route('contacts.destroy', $contact->id) }}"
                                                         method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
@@ -95,12 +77,12 @@
 
 
 
-                                                    <a href="{{ route('users.show',$initiative->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                                    <a href="{{ route('contacts.show',$contact->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
 
-                                                    <a href="{{ route('users.edit',$initiative->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                                    <a href="{{ route('contacts.edit',$contact->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

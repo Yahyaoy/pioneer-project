@@ -5,31 +5,12 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Users For Initiative</h1>
-
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Users For Initiative</h6>
-            </div>
-            <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <div class="table-responsive">
-
-
-                    here data about this initiative
-
-                </div>
-            </div>
-        </div>
+        <h1 class="h3 mb-2 text-gray-800">All Owners</h1>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Users For Initiative</h6>
+                <h6 class="m-0 font-weight-bold text-primary">All Owners</h6>
             </div>
             <div class="card-body">
                 @if (session('success'))
@@ -59,6 +40,8 @@
                                                 aria-label="Name: activate to sort column descending" style="width: 59px;">
                                                 Status</th>
 
+
+
                                             <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
                                             colspan="1" aria-label="Start date: activate to sort column ascending"
                                             style="width: 122px;">Created At</th>
@@ -72,20 +55,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($initiative_patr as $initiative)
+                                        @foreach ($owners as $owner)
                                             <tr class="odd">
-                                                <td class="sorting_1">{{ $initiative->id }}</td>
+                                                <td class="sorting_1">{{ $owner->id }}</td>
 
-                                                <td>name here</td>
-                                                <td>{{ $initiative->status }}</td>
+                                                <td>{{ $owner->name }}</td>
+                                                <td>{{ $owner->status }}</td>
 
-                                                <td>{{ $initiative->created_at }}</td>
-                                                <td>{{ $initiative->updated_at }}</td>
+                                                <td>{{ $owner->created_at }}</td>
+                                                <td>{{ $owner->updated_at }}</td>
 
 
 
                                                 <td>
-                                                    <form id="delete-form" action="{{ route('users.destroy', $initiative->id) }}"
+                                                    <form id="delete-form" action="{{ route('owners.destroy', $owner->id) }}"
                                                         method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
@@ -95,12 +78,12 @@
 
 
 
-                                                    <a href="{{ route('users.show',$initiative->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                                    <a href="{{ route('owners.show',$owner->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
 
-                                                    <a href="{{ route('users.edit',$initiative->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                                    <a href="{{ route('owners.edit',$owner->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

@@ -143,14 +143,6 @@ public function loginAdmin(Request $request)
 
     $user = Auth::user();
 
-    // Check if the user has 'owner' role
-    if ($user->role !== 'admin') {
-
-
-        return redirect()->back()->with('error','بيانات اعتماد غير صالحة');
-
-   }
-
     // Create token
     $token = $user->createToken('AdminToken')->plainTextToken;
 
@@ -160,7 +152,7 @@ public function loginAdmin(Request $request)
 //     ->with('token', $token)
 //     ->with('user', $user);
 
-return redirect()->route('admin.index')->with('error','مرحبًا بك مرة أخرى!');
+return redirect()->route('admin.index')->with('success','مرحبًا بك مرة أخرى!');
 
 }
 

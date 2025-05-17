@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactsController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
@@ -7,6 +8,11 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ChartController;
 use App\Http\Controllers\Admin\InitiativeController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\NotificationssController;
+use App\Http\Controllers\Admin\OwnersController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\website\AuthWebsiteController;
+use App\Http\Controllers\website\WebsiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +24,7 @@ use App\Http\Controllers\Admin\NewsController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/',[AdminController::class,'index'])->name('admin.index')->middleware('auth');
+Route::get('/dashboard',[AdminController::class,'index'])->name('admin.index')->middleware('auth');
 
 // Owner Auth
 
@@ -45,22 +51,63 @@ Route::post('logout',[AuthController::class,'logout'])->name('logout');
 
 
 
-// News Route
+// News Routes
 Route::resource('news',NewsController::class);
 Route::resource('initiative',InitiativeController::class);
 Route::resource('users',UserController::class);
+Route::resource('owners',OwnersController::class);
+Route::resource('contacts',ContactsController::class);
+Route::resource('notifications',NotificationssController::class);
 
 
 
 
-// Chart Route
+
+
+
+// Chart Routes
 
 Route::get('/getChartData', [ChartController::class, 'getChartData'])->name('getChartData');
 Route::get('/getDonutChartData', [ChartController::class, 'getDonutChartData'])->name('getDonutChartData');
 
 
 
-// Website Route
-Route::get('/website', function () {
+// Website Routes
+// Route::get('/', [WebsiteController::class,'index'])->name('website.index');
+
+Route::get('/',function(){
     return view('website.index');
 })->name('website.index');
+
+Route::get('/details/initiative',[WebsiteController::class,'details'])->name('details.initiative');
+
+
+Route::get('join',function(){
+    return view('website.join');
+})->name('website.join');
+
+
+
+// Auth User Routes
+
+
+Route::get('user-login' ,[AuthWebsiteController::class,'showUserLoginForm'])->name('user.login');
+
+
+Route::post('/login-user', [AuthWebsiteController::class, 'loginUser'])->name('login.user');
+
+
+
+Route::get('user-register' ,[AuthWebsiteController::class,'showUserRegisterForm'])->name('userRegister');
+
+
+Route::post('/register-user', [AuthWebsiteController::class, 'registerUser'])->name('user.register');
+
+Route::post('user-logout',[AuthWebsiteController::class,'logoutUser'])->name('user.logout');
+
+
+
+Route::get('user-profile',[AuthWebsiteController::class,'showUserProfile'])->name('user.profile');
+
+
+

@@ -82,8 +82,8 @@
             <div id="collapseOwners" class="collapse" aria-labelledby="headingJobs" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Owners:</h6>
-                    <a class="collapse-item" href="">Add Owners</a>
-                    <a class="collapse-item" href="">All Owners</a>
+                    <a class="collapse-item" href="{{ route('owners.create') }}">Add Owners</a>
+                    <a class="collapse-item" href="{{ route('owners.index') }}">All Owners</a>
                 </div>
             </div>
         </li>
@@ -97,8 +97,8 @@
             <div id="collapseJobs" class="collapse" aria-labelledby="headingJobs" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Initiative:</h6>
-                    <a class="collapse-item" href="">Add Initiative</a>
-                    <a class="collapse-item" href="">All Initiative</a>
+                    {{-- <a class="collapse-item" href="">Add Initiative</a> --}}
+                    <a class="collapse-item" href="{{ route('initiative.index') }}">All Initiative</a>
                 </div>
             </div>
         </li>
@@ -113,7 +113,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Users:</h6>
                     {{-- <a class="collapse-item" href="{{ route('cities.create') }}">Add City</a> --}}
-                    <a class="collapse-item" href="">All Users</a>
+                    <a class="collapse-item" href="{{ route('users.index') }}">All Users</a>
                 </div>
             </div>
         </li>
@@ -142,8 +142,26 @@
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Contacts:</h6>
-                    <a class="collapse-item" href="">Add Contact</a>
-                    <a class="collapse-item" href="">My Contact</a>
+                    {{-- <a class="collapse-item" href="">Add Contact</a> --}}
+                    <a class="collapse-item" href="{{ route('contacts.index') }}">All Contact</a>
+                </div>
+            </div>
+        </li>
+
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNotification"
+                aria-expanded="true" aria-controls="collapseNotification">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Notifications</span>
+            </a>
+            <div id="collapseNotification" class="collapse" aria-labelledby="headingContacts"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Notifications:</h6>
+                    <a class="collapse-item" href="{{ route('notifications.create') }}">Add Notification</a>
+                    <a class="collapse-item" href="{{ route('notifications.index') }}">All Notification</a>
                 </div>
             </div>
         </li>
