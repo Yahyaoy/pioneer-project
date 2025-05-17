@@ -64,7 +64,7 @@
     <!-- Navigation Bar (Sticky) -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Pioneer</a>
+            <a class="navbar-brand" href="">Pioneer</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -82,12 +82,42 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>
-                    <li>
-                         <button class="btn btn-join" onclick="{{ route('owner.login') }}" style="background-color: white; color: #13639E; border: none; padding: 10px 20px; border-radius: 5px; margin-left: 10px;"><a style="text-decoration: none;" href="{{ route('owner.login') }}">Admin</a></button>
+                    <li style="position: relative; display: inline-block;">
+                        <button onclick="toggleDropdown()" style="background-color: white; color: #13639E; border: none; padding: 10px 20px; border-radius: 5px; margin-left: 10px;">
+                            Admin/Owner
+                        </button>
+                        <ul id="loginDropdown" style="display: none; position: absolute; background-color: white; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); border-radius: 5px; padding: 0; margin-top: 5px; z-index: 1;">
+                            <li style="list-style: none;">
+                                <a href="{{ route('admin.login') }}" style="color: #13639E; padding: 12px 16px; text-decoration: none; display: block;">Admin</a>
+                            </li>
+                            <li style="list-style: none;">
+                                <a href="{{ route('owner.login') }}" style="color: #13639E; padding: 12px 16px; text-decoration: none; display: block;">Owner</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li>
-                        <button class="btn btn-join" style="background-color: white; color: #13639E; border: none; padding: 10px 20px; border-radius: 5px; margin-left: 10px;"><a style="text-decoration: none;" href="{{ route('admin.login') }}">Owner</a></button>
-                   </li>
+
+                    <script>
+                        function toggleDropdown() {
+                            var dropdown = document.getElementById("loginDropdown");
+                            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+                        }
+                    </script>
+
+
+
+
+                   @if (auth()->user())
+                   <li>
+                    <button class="btn btn-join" style="background-color: white; color: #13639E; border: none; padding: 10px 20px; border-radius: 5px; margin-left: 10px;"><a style="text-decoration: none;" href="{{ route('user.profile') }}">Profile</a></button>
+               </li>
+
+
+                   @else
+                   <li>
+                    <button class="btn btn-join" style="background-color: white; color: #13639E; border: none; padding: 10px 20px; border-radius: 5px; margin-left: 10px;"><a style="text-decoration: none;" href="{{ route('user.login') }}">User</a></button>
+               </li>
+
+                   @endif
                 </ul>
             </div>
         </div>
@@ -106,29 +136,51 @@
 
 
     <!-- News Section with Carousel -->
-    <section id="news" style="background-color: #f8f9fa; ">
+    <section id="news" class="news-section py-5">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Latest News</h2>
-            <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" data-aos="fade-up" data-aos-delay="200">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <h2 class="section-title text-center mb-5" data-aos="fade-up">Latest News & Updates</h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-8 mx-auto">
+                    <div class="news-filters text-center" data-aos="fade-up" data-aos-delay="100">
+                        <button class="btn btn-filter active">All</button>
+                        <button class="btn btn-filter">Initiatives</button>
+                        <button class="btn btn-filter">Events</button>
+                        <button class="btn btn-filter">Updates</button>
+                    </div>
                 </div>
+            </div>
+
+            <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" data-aos="fade-up" data-aos-delay="200">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <div style="height: 400px; overflow: hidden;">
-                          <img src="https://www.thrivecyn.ca/wp-content/uploads/2024/11/Education-Initiatives.png"
-                               class="d-block w-100 h-100 object-fit-cover" alt="News 1">
+                        <div class="news-card">
+                            <div class="row g-0">
+                                <div class="col-md-6">
+                                    <div class="news-image">
+                                        <img src="https://www.thrivecyn.ca/wp-content/uploads/2024/11/Education-Initiatives.png" 
+                                             alt="News 1" class="img-fluid">
+                                        <div class="news-category">Initiative</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="news-content">
+                                        <span class="news-date"><i class="far fa-calendar-alt"></i> March 15, 2024</span>
+                                        <h3>New Environmental Initiative Launched</h3>
+                                        <p class="news-excerpt">We're excited to announce our latest initiative focused on sustainable city development. This groundbreaking project aims to transform urban spaces into green havens.</p>
+                                        <div class="news-stats">
+                                            <span><i class="fas fa-user-friends"></i> 150 Participants</span>
+                                            <span><i class="fas fa-map-marker-alt"></i> New York City</span>
+                                        </div>
+                                        <button class="btn btn-read-more">Read More <i class="fas fa-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="carousel-caption d-none d-md-block">
-                          <h5>New Environmental Initiative Launched</h5>
-                          <p>We're excited to announce our latest initiative focused on sustainable city development.</p>
-                          <button class="btn btn-primary">Read More</button>
-                        </div>
-                      </div>
+                    </div>
 
-                      <div class="carousel-item active">
+                    <!-- Additional carousel items with the same structure -->
+                    <div class="carousel-item active">
                         <div style="height: 400px; overflow: hidden;">
                           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSi4bYQZQHCzXawhYUiaU0MF8Rr8MEjl-pXeQ&s"
                                class="d-block w-100 h-100 object-fit-cover" alt="News 1">
@@ -153,16 +205,178 @@
                       </div>
 
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
+                <div class="carousel-indicators custom-indicators">
+                    <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+
+                <button class="carousel-control-prev custom-control" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                    <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
+                <button class="carousel-control-next custom-control" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                    <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
         </div>
+
+        <style>
+            .news-section {
+                background-color: #f8f9fa;
+                position: relative;
+            }
+
+            .news-filters {
+                margin-bottom: 30px;
+            }
+
+            .btn-filter {
+                background: transparent;
+                border: none;
+                color: #666;
+                margin: 0 10px;
+                padding: 8px 20px;
+                border-radius: 25px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-filter.active,
+            .btn-filter:hover {
+                background: #13639E;
+                color: white;
+            }
+
+            .news-card {
+                background: white;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+                margin: 20px 0;
+            }
+
+            .news-image {
+                position: relative;
+                height: 400px;
+                overflow: hidden;
+            }
+
+            .news-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .news-category {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: rgba(19, 99, 158, 0.9);
+                color: white;
+                padding: 5px 15px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+            }
+
+            .news-content {
+                padding: 40px;
+                height: 400px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .news-date {
+                color: #666;
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+                display: block;
+            }
+
+            .news-date i {
+                margin-right: 5px;
+                color: #13639E;
+            }
+
+            .news-content h3 {
+                color: #2c3e50;
+                margin-bottom: 15px;
+                font-size: 1.8rem;
+            }
+
+            .news-excerpt {
+                color: #666;
+                margin-bottom: 20px;
+                line-height: 1.6;
+            }
+
+            .news-stats {
+                display: flex;
+                gap: 20px;
+                margin-bottom: 20px;
+                color: #666;
+                font-size: 0.9rem;
+            }
+
+            .news-stats i {
+                color: #13639E;
+                margin-right: 5px;
+            }
+
+            .btn-read-more {
+                background: #13639E;
+                color: white;
+                border: none;
+                padding: 10px 25px;
+                border-radius: 25px;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                transition: all 0.3s ease;
+                align-self: flex-start;
+            }
+
+            .btn-read-more:hover {
+                background: #0d4d7a;
+                transform: translateX(5px);
+                color: white;
+            }
+
+            .custom-indicators {
+                bottom: -50px;
+            }
+
+            .custom-indicators button {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background-color: #13639E;
+                opacity: 0.5;
+                margin: 0 5px;
+            }
+
+            .custom-indicators button.active {
+                opacity: 1;
+            }
+
+            .custom-control {
+                width: 40px;
+                height: 40px;
+                background: #13639E;
+                border-radius: 50%;
+                opacity: 1;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .custom-control:hover {
+                background: #0d4d7a;
+            }
+
+            .custom-control i {
+                color: white;
+                font-size: 1.2rem;
+            }
+        </style>
     </section>
 
     <!-- Initiatives Section -->
