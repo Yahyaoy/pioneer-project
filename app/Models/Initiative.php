@@ -20,4 +20,14 @@ class Initiative extends Model
     {
         return $this->hasMany(InitiativeParticipant ::class);
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

@@ -118,11 +118,7 @@ class AuthWebsiteController extends Controller
 
 
 
-    public function showUserProfile()
-    {
-        $user_date = auth()->user();
-        return view('website.auth.profile',compact('user_date'));
-    }
+
 
 
 

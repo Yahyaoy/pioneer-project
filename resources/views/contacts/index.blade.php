@@ -63,7 +63,7 @@
                                                     {{ $contact->phone }}
                                                 </td>
 
-                                                <td>{{ $news->subject }}</td>
+                                                <td>{{ $contact->subject }}</td>
 
 
                                                 <td>
@@ -73,13 +73,13 @@
                                                         @method('DELETE')
                                                     </form>
                                                     <a href="#" class="btn btn-danger btn-sm"
-                                                    onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this city?')) document.getElementById('delete-form').submit();"><i class="fas fa-trash"></i></a>
+                                                    onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this contact request?')) document.getElementById('delete-form').submit();"><i class="fas fa-trash"></i></a>
 
 
 
-                                                    <a href="{{ route('contacts.show',$contact->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                                    {{-- <a href="{{ route('contacts.show',$contact->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a> --}}
 
-                                                    <a href="{{ route('contacts.edit',$contact->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                                    {{-- <a href="{{ route('contacts.edit',$contact->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a> --}}
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -16,7 +16,14 @@ class NewsController extends Controller
      */
     public function index()
     {
+        if(auth()->user()->role == 'admin')
+        {
+         $all_news = News::all();
+
+        }else{
          $all_news = News::where('organization_id',auth()->user()->organization_id)->get();
+
+        }
         return view('news.index',compact('all_news'));
     }
 

@@ -59,4 +59,34 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->role === 'admin';
     }
+    public function initiativeParticipants()
+{
+    return $this->hasMany(InitiativeParticipant::class);
+}
+
+public function joinedInitiatives()
+{
+    return $this->hasManyThrough(
+        Initiative::class,
+        InitiativeParticipant::class,
+        'user_id',       // Foreign key on InitiativeParticipant table
+        'id',            // Foreign key on Initiative table
+        'id',            // Local key on User table
+        'initiative_id'  // Local key on InitiativeParticipant table
+    );
+}
+
+
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

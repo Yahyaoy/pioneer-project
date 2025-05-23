@@ -83,9 +83,9 @@
 
 
 
-                                                    <a href="{{ route('notifications.show',$notification->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                                    {{-- <a href="{{ route('notifications.show',$notification->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
 
-                                                    <a href="{{ route('notifications.edit',$notification->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                                    <a href="{{ route('notifications.edit',$notification->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a> --}}
                                                 </td>
                                             </tr>
                                         @endforeach
