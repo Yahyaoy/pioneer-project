@@ -15,6 +15,10 @@ class UserController extends Controller
     public function index()
     {
         $initiative_patr = InitiativeParticipant::where('initiative_id',auth()->user()->organization_id)->get();
+
+        // if(auth()->user()->role == 'admin'){
+
+        // }
         return view('users.index',compact('initiative_patr'));
     }
 

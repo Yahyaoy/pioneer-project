@@ -14,7 +14,14 @@ class InitiativeController extends Controller
      */
     public function index()
     {
-        $initiatives = Initiative::where('organization_id',auth()->user()->organization_id)->get();
+
+
+
+        if(auth()->user()->role == 'admin'){
+            $initiatives = Initiative::all();
+        }else{
+            $initiatives = Initiative::where('organization_id',auth()->user()->organization_id)->get();
+        }
         return view('initiative.index',compact('initiatives'));
     }
 

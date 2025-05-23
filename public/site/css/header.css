@@ -1,0 +1,95 @@
+
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background-image: url('https://assets.rbl.ms/27044751/origin.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    padding-top: 76px; /* Add padding for navbar height */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.07) 50%,
+    rgba(0, 0, 0, 0.03) 100%
+);
+backdrop-filter: blur(2px);
+    /* background: linear-gradient(45deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 100%); */
+}
+
+.hero-buttons .btn-primary {
+    background-color: #13639E;
+    border-color: #13639E;
+    padding: 12px 30px;
+    transition: all 0.3s ease;
+}
+
+.hero-buttons .btn-primary:hover {
+    background-color: #0d4d7a;
+    border-color: #0d4d7a;
+    transform: translateY(-2px);
+}
+
+.hero-buttons .btn-outline-light {
+    padding: 12px 30px;
+    transition: all 0.3s ease;
+}
+
+.hero-buttons .btn-outline-light:hover {
+    background-color: white;
+    color: #13639E;
+    transform: translateY(-2px);
+}
+
+.hero-stats {
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.stat-item p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.8);
+}
+
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-buttons .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .stat-item {
+        margin-bottom: 1rem;
+    }
+}
+

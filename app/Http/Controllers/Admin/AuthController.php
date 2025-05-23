@@ -141,7 +141,15 @@ public function loginAdmin(Request $request)
         return redirect()->back()->with('error','بيانات اعتماد غير صالحة');
     }
 
+
     $user = Auth::user();
+
+    // Check if the user has 'owner' role
+    if ($user->role !== 'admin') {
+        Auth::logout(); // logout immediately
+        return redirect()->back()->with('error','بيانات اعتماد غير صالحة');
+
+   }
 
     // Create token
     $token = $user->createToken('AdminToken')->plainTextToken;
