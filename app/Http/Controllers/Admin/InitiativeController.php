@@ -14,9 +14,6 @@ class InitiativeController extends Controller
      */
     public function index()
     {
-
-
-
         if(auth()->user()->role == 'admin'){
             $initiatives = Initiative::all();
         }else{
@@ -54,6 +51,7 @@ class InitiativeController extends Controller
 
         //     return redirect()->back()->with('error','Something went error');
         // }
+        $imagePath = $request->file('image') ? $request->file('image')->store('initiatives_images', 'public') : null;
 
         $initiative = Initiative::create([
             'name' => $request->name,
@@ -64,7 +62,7 @@ class InitiativeController extends Controller
             'max_participants' => $request->max_participants,
             'details' => $request->details,
             'hours' => $request->hours,
-            'image' => $request->file('image') ? $request->file('image')->store('initiatives') : null,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('initiative.index')->with('success','تم إنشاء المبادرة بنجاح');
@@ -75,10 +73,10 @@ class InitiativeController extends Controller
      */
     public function show(Initiative $initiative)
     {
-        $initiative = Initiative::where('id','=',$initiative->id)->get();
+        // Make sure participants and their user relationships are eager loaded
+//        $initiative->load('participants.user');
 
-
-        return view('initiative.show',compact('initiative'));
+        return view('initiative.show', compact('initiative'));
     }
 
     /**
@@ -86,8 +84,12 @@ class InitiativeController extends Controller
      */
     public function edit(Initiative $initiative)
     {
-        $initiative = Initiative::find($initiative->id);
+        $user = Auth::user();
 
+        // Ensure the user belongs to the same organization as the initiative
+        if ($user->organization_id !== $initiative->organization_id) {
+            abort(403, 'You are not authorized to edit this initiative.');
+        }
 
         return view('initiative.edit',compact('initiative'));
     }

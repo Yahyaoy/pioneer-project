@@ -79,8 +79,8 @@
 
 
                                                 <td>
+                                                    <img src="{{ asset('storage/' . $initiative->image) }}" alt="Initiative Image" height="80" width="80">
 
-                                                    <img src="{{ $initiative->image }}" height="80" width="80" alt="">
                                                 </td>
                                                 <td>
                                                     <form id="delete-form" action="{{ route('initiative.destroy', $initiative->id) }}"

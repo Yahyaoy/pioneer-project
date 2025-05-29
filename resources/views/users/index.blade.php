@@ -5,87 +5,75 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Initiative</h1>
+        <h1 class="h3 mb-2 text-gray-800">USERS</h1>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">My Initiative</h6>
+                <h6 class="m-0 font-weight-bold text-primary">My Users</h6>
             </div>
             <div class="card-body">
                 @if (session('success'))
                     <div class="alert alert-success">
-                        {{ session('success') }}
+                            {{ session('success') }}
                     </div>
                 @endif
                 <div class="table-responsive">
                     <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0"
-                                    role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                                <table class="table table-bordered">
                                     <thead>
-                                        <tr role="row">
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Name: activate to sort column descending" style="width: 59px;">
-                                                Id</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Name: activate to sort column descending" style="width: 59px;">
-                                                Name</th>
-
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Name: activate to sort column descending" style="width: 59px;">
-                                                Status</th>
-
-
-
-                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Start date: activate to sort column ascending"
-                                            style="width: 122px;">Created At</th>
-
-                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Start date: activate to sort column ascending"
-                                            style="width: 122px;">Updated At</th>
-                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                                colspan="1" aria-label="Salary: activate to sort column ascending"
-                                                style="width: 109px;">Actions</th>
-                                        </tr>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Email</th>
+                                        <th>Initiatives Joined</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($initiative_patr as $initiative)
-                                            <tr class="odd">
-                                                <td class="sorting_1">{{ $initiative->id }}</td>
+                                    @foreach($initiative_patr as $user)
+                                        <tr>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>
+                                                <style>
+                                                    ul.participant-list {
+                                                        list-style: none; /* Remove default bullets */
+                                                        padding: 0;
+                                                        margin: 0;
+                                                    }
+                                                    ul.participant-list li {
+                                                        background: #f5f8fa;
+                                                        border: 1px solid #ddd;
+                                                        border-radius: 6px;
+                                                        padding: 12px 16px;
+                                                        margin-bottom: 10px;
+                                                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                                        font-family: Arial, sans-serif;
+                                                    }
+                                                    ul.participant-list li strong {
+                                                        color: #2c3e50;
+                                                        width: 100px;
+                                                        display: inline-block;
+                                                    }
+                                                </style>
 
-                                                <td>name here</td>
-                                                <td>{{ $initiative->status }}</td>
+                                                <ul class="participant-list">
+                                                    @foreach($user->initiativeParticipants as $participant)
+                                                        <li>
+                                                            <strong>Initiative:</strong> {{ $participant->initiative->name ?? 'N/A' }} <br>
+                                                            <strong>Status:</strong> {{ ucfirst($participant->status) }} <br>
+                                                            <strong>Joined at:</strong> {{ $participant->created_at->format('Y-m-d') }}
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
 
-                                                <td>{{ $initiative->created_at }}</td>
-                                                <td>{{ $initiative->updated_at }}</td>
-
-
-
-                                                <td>
-                                                    <form id="delete-form" action="{{ route('users.destroy', $initiative->id) }}"
-                                                        method="POST" style="display: none;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
-                                                    <a href="#" class="btn btn-danger btn-sm"
-                                                    onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this city?')) document.getElementById('delete-form').submit();"><i class="fas fa-trash"></i></a>
-
-
-
-                                                    <a href="{{ route('users.show',$initiative->id) }}" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
-
-                                                    <a href="{{ route('users.edit',$initiative->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
 

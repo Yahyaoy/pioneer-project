@@ -66,6 +66,11 @@ Route::resource('owners',OwnersController::class);
 Route::resource('contacts',ContactsController::class);
 Route::resource('notifications',NotificationssController::class);
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/certificates/create', [\App\Http\Controllers\website\CertificateController::class, 'create'])->name('certificates.create');
+    Route::post('/certificates', [\App\Http\Controllers\website\CertificateController::class, 'store'])->name('certificates.store');
+    Route::get('/certificates', [\App\Http\Controllers\website\CertificateController::class, 'index'])->name('certificates.index');
+});
 
 
 
@@ -133,7 +138,7 @@ Route::post('/product/{id}/review', [ReviewController::class, 'product_review'])
 
 
 // add notification to users
-// give certificate to user in initiative 
+// give certificate to user in initiative
 // ==========================================
 
 

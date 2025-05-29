@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Initiative;
 use App\Models\InitiativeParticipant;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -12,15 +13,20 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $initiative_patr = InitiativeParticipant::where('initiative_id',auth()->user()->organization_id)->get();
+        public function index()
+        {
+            $ownerId =  auth()->user()->organization_id;
 
-        // if(auth()->user()->role == 'admin'){
+            // جلب كل معرفات المبادرات التي يملكها هذا الowner
+            $initiativeIds = Initiative::where('organization_id', $ownerId)->pluck('id');
 
-        // }
-        return view('users.index',compact('initiative_patr'));
-    }
+            // جلب المستخدمين المشاركين في أي من هذه المبادرات
+            $initiative_patr = User::whereHas('initiativeParticipants', function ($query) use ($initiativeIds) {
+                $query->whereIn('initiative_id', $initiativeIds);
+            })->with('initiativeParticipants.initiative')->get();
+
+            return view('users.index', compact('initiative_patr'));
+        }
 
     /**
      * Show the form for creating a new resource.
