@@ -52,6 +52,10 @@
                                             <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
                                             colspan="1" aria-label="Start date: activate to sort column ascending"
                                             style="width: 122px;">Hours</th>
+
+                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-label="Start date: activate to sort column ascending"
+                                                style="width: 122px;">Reviews</th>
                                             {{-- <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
                                             colspan="1" aria-label="Start date: activate to sort column ascending"
                                             style="width: 122px;">Status</th> --}}
@@ -74,6 +78,10 @@
                                                 <td>{{ $initiative->end_date}}</td>
                                                 <td>{{ $initiative->max_participants }}</td>
                                                 <td>{{ $initiative->hours }}</td>
+                                                <td>
+                                                    <a href="{{ route('initiatives.review', $initiative->id) }}" class="btn btn-primary mt-3">
+                                                        Show All Reviews
+                                                    </a>
                                                 {{-- <td>{{ $initiative->status }}</td> --}}
 
 

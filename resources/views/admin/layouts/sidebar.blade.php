@@ -75,6 +75,23 @@
                 </div>
             </div>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCertificates"
+               aria-expanded="true" aria-controls="collapseCertificates">
+                <i class="fas fa-fw fa-certificate"></i>
+                <span>Certificates</span>
+            </a>
+            <div id="collapseCertificates" class="collapse" aria-labelledby="headingCertificates" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Certificates:</h6>
+                    <a class="collapse-item" href="{{ route('certificates.create') }}">Issue Certificate</a>
+                    <a class="collapse-item" href="{{ route('certificates.index') }}">All Certificates</a>
+                </div>
+            </div>
+        </li>
+
+
     @elseif(auth()->user()->role == 'admin')
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOwners"
@@ -106,20 +123,7 @@
             </div>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
-                aria-expanded="true" aria-controls="collapseUser">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>Users</span>
-            </a>
-            <div id="collapseUser" class="collapse" aria-labelledby="headingJobs" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Users:</h6>
-                    {{-- <a class="collapse-item" href="{{ route('cities.create') }}">Add City</a> --}}
-                    <a class="collapse-item" href="{{ route('users.index') }}">All Users</a>
-                </div>
-            </div>
-        </li>
+
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCity"
@@ -132,6 +136,21 @@
                     <h6 class="collapse-header">News:</h6>
                     <a class="collapse-item" href="{{ route('news.create') }}">Add News</a>
                     <a class="collapse-item" href="{{ route('news.index') }}">All News</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCity"
+               aria-expanded="true" aria-controls="collapseCity">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>News</span>
+            </a>
+            <div id="collapseCity" class="collapse" aria-labelledby="headingJobs" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">News:</h6>
+                    <a class="collapse-item" href="{{ route('certificates.create') }}">Give Certificate</a>
+{{--                    <a class="collapse-item" href="{{ route('certificates.index') }}">All News</a>--}}
                 </div>
             </div>
         </li>

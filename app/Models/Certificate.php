@@ -28,4 +28,9 @@ class Certificate extends Model
     {
         return $this->belongsTo(Initiative::class);
     }
+
+    public function participant()
+    {
+        return $this->belongsTo(InitiativeParticipant::class);
+    }
 }

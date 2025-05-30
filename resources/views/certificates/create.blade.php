@@ -27,17 +27,17 @@
                 <label for="rating">⭐ التقييم:</label>
                 <select name="rating" id="rating" class="form-control" required>
                     <option value="">اختر التقييم</option>
-                    <option value="ممتاز">ممتاز</option>
-                    <option value="جيد جدًا">جيد جدًا</option>
-                    <option value="جيد">جيد</option>
-                    <option value="مقبول">مقبول</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Very Good">Very Good</option>
+                    <option value="Good">Good</option>
+                    <option value="Acceptable">Acceptable</option>
                 </select>
             </div>
 
-            <div class="form-group mt-3">
-                <label for="certificate_file">📄 رفع ملف الشهادة (PDF/صورة - اختياري):</label>
-                <input type="file" name="certificate_file" id="certificate_file" class="form-control-file">
-            </div>
+{{--            <div class="form-group mt-3">--}}
+{{--                <label for="certificate_file">📄 رفع ملف الشهادة (PDF/صورة - اختياري):</label>--}}
+{{--                <input type="file" name="certificate_file" id="certificate_file" class="form-control-file">--}}
+{{--            </div>--}}
 
             <button type="submit" class="btn btn-primary mt-4">🎓 إصدار الشهادة</button>
         </form>

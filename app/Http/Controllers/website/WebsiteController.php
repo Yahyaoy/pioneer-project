@@ -45,7 +45,7 @@ class WebsiteController extends Controller
 
         // $participant = InitiativeParticipant::where('initiative_id',$initiatives->id)->get();
 
-        // dd($participant);
-        return view('website.initiatives.details',compact('initiative','reviews'));
+        // dd($participant);Initiatives
+        return view('website.Initiatives.details',compact('initiative','reviews'));
     }
 }

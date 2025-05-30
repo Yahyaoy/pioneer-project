@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\Initiative;
 use App\Models\InitiativeParticipant;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CertificateController extends Controller
 {
@@ -26,45 +29,54 @@ class CertificateController extends Controller
         return view('certificates.create', compact('participants'));
     }
 
-    // حفظ الشهادة
-    public function store(Request $request)
+        public function store(Request $request)
     {
         $request->validate([
             'participant_id' => 'required|exists:initiative_participants,id',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'certificate_file' => 'nullable|file|mimes:pdf,jpg,png',
+            'rating' => 'required|string|max:255',
         ]);
 
-        $participant = InitiativeParticipant::findOrFail($request->participant_id);
+        $participant = InitiativeParticipant::with(['user', 'initiative'])->findOrFail($request->participant_id);
+        $user = $participant->user;
+        $initiative = $participant->initiative;
 
-        $filePath = null;
-        if ($request->hasFile('certificate_file')) {
-            $filePath = $request->file('certificate_file')->store('certificates', 'public');
-        }
+        // PDF file name
+        $fileName = 'certificate_' . $user->id . '_' . time() . '.pdf';
 
+        // Generate the PDF content
+        $pdf = Pdf::loadView('certificates.pdf', [
+            'user' => $user,
+            'initiative' => $initiative,
+            'rating' => $request->rating,
+            'owner' => auth()->user()->name,
+            'date' => now()->format('Y-m-d'),
+        ]);
+
+        // Save to storage/app/public/certificates
+        Storage::disk('public')->put('certificates/' . $fileName, $pdf->output());
+
+        // Save certificate record to DB
         Certificate::create([
-            'user_id' => $participant->user_id,
-            'initiative_id' => $participant->initiative_id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'certificate_file' => $filePath,
+            'user_id' => $user->id,
+            'initiative_id' => $initiative->id,
+            'title' => 'شهادة مشاركة في ' . $initiative->name,
+            'description' => 'شارك المستخدم في المبادرة وحصل على تقييم: ' . $request->rating,
+            'certificate_file' => 'certificates/' . $fileName,
             'owner_name' => auth()->user()->name,
         ]);
 
-        return redirect()->back()->with('success', 'تم منح الشهادة بنجاح.');
+        return redirect()->back()->with('success', 'تم إصدار الشهادة بنجاح!');
     }
+
 
     // عرض قائمة الشهادات (اختياري)
     public function index()
     {
-        $ownerId = auth()->user()->organization_id;
-        $initiatives = Initiative::where('organization_id', $ownerId)->pluck('id');
+        $user = Auth::user();
 
-        $certificates = Certificate::with('user', 'initiative')
-            ->whereIn('initiative_id', $initiatives)
-            ->get();
+        $certificates = Certificate::with(['participant.user', 'participant.initiative'])->get();
 
         return view('certificates.index', compact('certificates'));
+
     }
 }

@@ -91,6 +91,8 @@ Route::get('/',[WebsiteController::class,'index'])->name('website.index');
 
 Route::get('/details/initiative/{id}',[WebsiteController::class,'details'])->name('details.initiative');
 
+//reviews
+Route::get('/initiatives/{id}/reviews', [ReviewController::class, 'show'])->name('initiatives.review');
 
 Route::get('join/{id}',[JoinInitiativeController::class ,'index'])->name('website.join.index');
 Route::post('join/{id}',[JoinInitiativeController::class ,'requestToJoin'])->name('website.join');
@@ -123,6 +125,8 @@ Route::post('user-logout',[AuthWebsiteController::class,'logoutUser'])->name('us
 
 
 Route::get('user-profile',[ProfileController::class,'index'])->name('user.profile');
+Route::get('profile/edit',[ProfileController::class,'edit'])->name('profile.edit');
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 Route::post('/contact', [WebsiteContactController::class, 'store'])->name('user.contact');
 

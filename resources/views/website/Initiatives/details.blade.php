@@ -138,26 +138,117 @@
 
 <h3>Add New Review</h3>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<form method="post" action="{{ route('site.product_review', $initiative->id) }}">
-    @csrf
-    <input type="hidden" name="initiative_id" value="{{ $initiative->id }}">
-    <div class="star-rating">
-        <div class="star-rating__wrap">
-          <input class="star-rating__input" id="star-rating-5" type="radio" name="rating" value="5">
-          <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-5" title="5 out of 5 stars"></label>
-          <input class="star-rating__input" id="star-rating-4" type="radio" name="rating" value="4">
-          <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-4" title="4 out of 5 stars"></label>
-          <input class="star-rating__input" id="star-rating-3" type="radio" name="rating" value="3">
-          <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-3" title="3 out of 5 stars"></label>
-          <input class="star-rating__input" id="star-rating-2" type="radio" name="rating" value="2">
-          <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-2" title="2 out of 5 stars"></label>
-        </div>
-      </div>
-    <textarea name="comment" class="form-control" placeholder="Comment" rows="4"></textarea>
+            <form method="post" action="{{ route('site.product_review', $initiative->id) }}" class="review-form">
+                @csrf
+                <input type="hidden" name="initiative_id" value="{{ $initiative->id }}">
 
-    <button class="btn btn-main mt-20">Post Review</button>
-</form>
+                <div class="form-group mb-4">
+                    <h5 class="form-label mb-3">Rate this initiative</h5>
+                    <div class="star-rating">
+                        <input class="star-rating__input" id="star-rating-5" type="radio" name="rating" value="5">
+                        <label class="star-rating__ico" for="star-rating-5" title="5 out of 5 stars">
+                            <i class="fas fa-star"></i>
+                        </label>
 
+                        <input class="star-rating__input" id="star-rating-4" type="radio" name="rating" value="4">
+                        <label class="star-rating__ico" for="star-rating-4" title="4 out of 5 stars">
+                            <i class="fas fa-star"></i>
+                        </label>
+
+                        <input class="star-rating__input" id="star-rating-3" type="radio" name="rating" value="3">
+                        <label class="star-rating__ico" for="star-rating-3" title="3 out of 5 stars">
+                            <i class="fas fa-star"></i>
+                        </label>
+
+                        <input class="star-rating__input" id="star-rating-2" type="radio" name="rating" value="2">
+                        <label class="star-rating__ico" for="star-rating-2" title="2 out of 5 stars">
+                            <i class="fas fa-star"></i>
+                        </label>
+
+                        <input class="star-rating__input" id="star-rating-1" type="radio" name="rating" value="1">
+                        <label class="star-rating__ico" for="star-rating-1" title="1 out of 5 stars">
+                            <i class="fas fa-star"></i>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="review-comment" class="form-label mb-2">Your Review</label>
+                    <textarea name="comment" id="review-comment" class="form-control review-textarea"
+                              placeholder="Share your experience with this initiative..." rows="4"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary submit-review-btn">
+                    <i class="fas fa-paper-plane me-2"></i> Post Review
+                </button>
+            </form>
+
+            <style>
+                .review-form {
+                    background-color: #f8f9fa;
+                    padding: 25px;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                    max-width: 600px;
+                    margin: 0 auto;
+                }
+
+                .form-label {
+                    font-weight: 600;
+                    color: #343a40;
+                }
+
+                .star-rating {
+                    display: flex;
+                    align-items: center;
+                    font-size: 0;
+                    direction: rtl; /* Right to left */
+                }
+
+                .star-rating__input {
+                    position: absolute;
+                    opacity: 0;
+                }
+
+                .star-rating__ico {
+                    font-size: 24px;
+                    color: #ddd;
+                    cursor: pointer;
+                    padding: 0 5px;
+                    transition: all 0.2s ease;
+                }
+
+                .star-rating__ico:hover,
+                .star-rating__ico:hover ~ .star-rating__ico,
+                .star-rating__input:checked ~ .star-rating__ico {
+                    color: #ffc107;
+                }
+
+                .review-textarea {
+                    border-radius: 8px;
+                    border: 1px solid #ced4da;
+                    transition: border-color 0.3s;
+                    resize: vertical;
+                }
+
+                .review-textarea:focus {
+                    border-color: #80bdff;
+                    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+                }
+
+                .submit-review-btn {
+                    padding: 10px 25px;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    letter-spacing: 0.5px;
+                    transition: all 0.3s ease;
+                }
+
+                .submit-review-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+            </style>
 
             <!-- Comments List -->
             <div class="comments-list">

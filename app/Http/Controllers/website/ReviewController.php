@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Initiative;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,5 +20,11 @@ class ReviewController extends Controller
         ]);
 
         return redirect()->back()->with('success','Review Created Successfuly');
+    }
+
+    public function show($id)
+    {
+        $initiative = Initiative::with('reviews.user')->findOrFail($id);
+        return view('review.show', compact('initiative'));
     }
 }
